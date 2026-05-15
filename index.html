@@ -15,7 +15,7 @@
             </div>
         </nav>
         <section class="board">
-            <div class="task-column">
+            <div id="todo" class="task-column">
                 <div class="heading">
                     <div class="left">Task</div>
                     <div class="right">count</div>
@@ -27,13 +27,16 @@
                     <button>Delete</button>
                 </div>
             </div>
-            <div class="task-column">
+            <div id="progress" class="task-column">
                  <div class="heading">
                     <div class="left">In progress</div>
                     <div class="right">count</div>
                 </div>
+                <div draggable="true" class="Inprogress" >
+                    
+                </div>
             </div>
-            <div class="task-column">
+            <div id="done" class="task-column">
                  <div class="heading">
                     <div class="left">Done</div>
                     <div class="right">count</div>

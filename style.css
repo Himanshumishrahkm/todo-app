@@ -58,6 +58,8 @@ section{
     flex: 1;
      background-color: #1f2937;
      height: 100vh;
+     transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+
 }
 div.heading{
    
@@ -67,14 +69,20 @@ div.heading{
     width: 100%;
     
 }
-.task{
+section .task-column .task{
     display: flex;
     flex-direction: column;
      background-color: #334155;
-       border-radius: 3%;
+    border-radius: 3%;
 
     padding:5px;
     margin: 8px;
+    cursor: grab;
+}
+
+section .task-column.hover-over{
+    border: 2px dotted white;
+    scale: 1.01;
 }
 .task button{
    align-self: flex-end;
@@ -85,12 +93,14 @@ div.heading{
    transition: 0.5s;
 }
 .task button:hover{
-    transform: scale(0.9);
+    transform: scale(0.9);  
      background-color: #dc2626;
     color: white;
 }
 
-
+.highlight{
+    border: 3px solid rgb(4, 97, 4) !important;
+}
 
 
 
