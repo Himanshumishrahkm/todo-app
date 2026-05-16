@@ -29,21 +29,16 @@ col.addEventListener("dragover",(e)=>{
 })
 
 col.addEventListener("drop",e=>{
-    console.log(e.target , dragedElement,col);
+    e.preventDefault();
 
-    // creating div 
-const taskDiv = document.createElement('div');
-taskDiv.setAttribute('draggable', 'true');
-taskDiv.classList.add('task');
+    col.appendChild(dragedElement);
+    col.classList.remove("hover-over");
 
-taskDiv.innerHTML = dragedElement.innerHTML;
-
-e.target.appendChild(taskDiv);
- if (dragedElement && dragedElement.parentElement) {
-        dragedElement.parentElement.removeChild(dragedElement);
-    }
-        
-        dragedElement = null;
+    [todo,progress,done].forEach(col=>{
+        const tasks = col.querySelectorAll(".task");
+        const count = col.querySelector(".right");
+        count.innerHTML = tasks.length;
+    })
 })
 }
 
@@ -52,4 +47,54 @@ e.target.appendChild(taskDiv);
 Adddragatcolumn(todo);
 Adddragatcolumn(progress);
 Adddragatcolumn(done);
+
+/* Modal related */
+const toggleModalButton = document.querySelector("#toggle-modal");
+const modal = document.querySelector(".modal");
+const bg_blur = document.querySelector(".bg");
+const addTaskButton = document.querySelector("#add-new-task");
+
+
+toggleModalButton.addEventListener("click",(e)=>{
+    modal.classList.toggle("active");
+    
+    bg_blur.addEventListener("click",(e)=>{
+        modal.classList.remove("active");
+    })
+
+    addTaskButton.addEventListener("click",(e)=>{
+        e.preventDefault();
+        const inp = document.querySelector("#modal-title").value;
+        const text = document.querySelector("#modal-textarea").value;
+
+        const div = document.createElement("div");
+        div.classList.add("task");
+        div.setAttribute("draggable","true");
+
+        div.innerHTML = `
+                    <h2>${inp}</h2>
+                    <p>${text}</p>
+                    <button>Delete</button>
+                        `
+
+        todo.appendChild(div);
+        [todo,progress,done].forEach(col=>{
+        const tasks = col.querySelectorAll(".task");
+        const count = col.querySelector(".right");
+        count.innerHTML = tasks.length;
+    })
+        modal.classList.remove("active");
+
+        div.addEventListener("drag",(e)=>{
+            dragedElement = div;
+        })
+
+    })
+
+    
+
+    
+})
+
+/* Modal related */
 
