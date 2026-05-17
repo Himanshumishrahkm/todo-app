@@ -1,10 +1,54 @@
+let taskData = {};
+
 const todo = document.querySelector("#todo");
 const progress = document.querySelector("#progress");
 const done = document.querySelector("#done");
 
 
+
+
+
+
 const tasks = document.querySelectorAll(".task");
 let dragedElement = null;
+
+/* Reload the previous data */
+if(localStorage.getItem("task_data"))
+{
+    const data = JSON.parse(localStorage.getItem("task_data"));
+    for (const col in data) {
+       const column = document.querySelector(`#${col}`);
+
+       data[col].forEach(c =>{
+        create_div(c.title,c.desc,column);
+       })
+    }
+
+
+     [todo,progress,done].forEach(col=>{
+        const tasks = col.querySelectorAll(".task");
+        const count = col.querySelector(".right");
+
+        count.innerText = tasks.length;
+    })
+
+}
+
+
+
+const delete_bnt = document.querySelectorAll("#bnt_delete");
+
+delete_bnt.forEach(bnt => {
+    bnt.addEventListener("click",e=>{
+    let par_ele = bnt.parentElement;
+    par_ele.remove();
+    savedIn();
+
+})
+})
+
+
+/* drag and drop functionality*/
 
 tasks.forEach(task => {
     task.addEventListener("drag",(e)=>{
@@ -37,10 +81,22 @@ col.addEventListener("drop",e=>{
     [todo,progress,done].forEach(col=>{
         const tasks = col.querySelectorAll(".task");
         const count = col.querySelector(".right");
+
+        
         count.innerHTML = tasks.length;
     })
+
+    /* saving data in local storage */
+    savedIn();
+    
 })
 }
+
+
+
+
+
+
 
 
 
@@ -57,6 +113,7 @@ const addTaskButton = document.querySelector("#add-new-task");
 
 toggleModalButton.addEventListener("click",(e)=>{
     modal.classList.toggle("active");
+    })
     
     bg_blur.addEventListener("click",(e)=>{
         modal.classList.remove("active");
@@ -67,34 +124,75 @@ toggleModalButton.addEventListener("click",(e)=>{
         const inp = document.querySelector("#modal-title").value;
         const text = document.querySelector("#modal-textarea").value;
 
-        const div = document.createElement("div");
+        
+        create_div(inp,text,todo);
+        
+
+        [todo,progress,done].forEach(col=>{
+        const tasks = col.querySelectorAll(".task");
+        const count = col.querySelector(".right");
+        
+
+
+        
+        count.innerHTML = tasks.length;
+    })
+
+    /* saving data in local storage */
+    savedIn();
+ 
+    /* saving data in local storage */
+    
+        modal.classList.remove("active");
+    })
+  
+
+/* Modal related */
+
+
+
+
+/* function for creating div element */
+
+function create_div(inp,text,col){
+     const div = document.createElement("div");
         div.classList.add("task");
         div.setAttribute("draggable","true");
 
         div.innerHTML = `
                     <h2>${inp}</h2>
                     <p>${text}</p>
-                    <button>Delete</button>
-                        `
+                    <button id = "bnt_delete">Delete</button>
+                        `;
+        col.appendChild(div);
 
-        todo.appendChild(div);
-        [todo,progress,done].forEach(col=>{
-        const tasks = col.querySelectorAll(".task");
-        const count = col.querySelector(".right");
-        count.innerHTML = tasks.length;
-    })
-        modal.classList.remove("active");
 
-        div.addEventListener("drag",(e)=>{
+         div.addEventListener("drag",(e)=>{
             dragedElement = div;
         })
 
-    })
+    div.childNodes[5].addEventListener("click",e=>{
+    let par_ele = bnt.parentElement;
+    par_ele.remove();
 
-    
-
-    
 })
+}
 
-/* Modal related */
+function savedIn()
+{
+    [todo,progress,done].forEach(col=>{
+        const tasks = col.querySelectorAll(".task");
+        const count = col.querySelector(".right");
+    taskData[col.id] = Array.from(tasks).map(t =>{
+            return {
+                title : t.querySelector("h2").innerText,
+                desc : t.querySelector("p").innerText,
+            }
+        })
+    })
+   localStorage.setItem("task_data",JSON.stringify(taskData));
+}
+
+
+
 
