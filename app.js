@@ -126,6 +126,7 @@ toggleModalButton.addEventListener("click",(e)=>{
 
         
         create_div(inp,text,todo);
+        savedIn();
         
 
         [todo,progress,done].forEach(col=>{
@@ -172,10 +173,9 @@ function create_div(inp,text,col){
         })
 
     div.childNodes[5].addEventListener("click",e=>{
-    let par_ele = bnt.parentElement;
-    par_ele.remove();
+        div.remove();
 
-})
+    })
 }
 
 function savedIn()
