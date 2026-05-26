@@ -4,11 +4,6 @@ const todo = document.querySelector("#todo");
 const progress = document.querySelector("#progress");
 const done = document.querySelector("#done");
 
-
-
-
-
-
 const tasks = document.querySelectorAll(".task");
 let dragedElement = null;
 
@@ -35,7 +30,7 @@ if(localStorage.getItem("task_data"))
 }
 
 
-
+/* For deleting Tasks */
 const delete_bnt = document.querySelectorAll("#bnt_delete");
 
 delete_bnt.forEach(bnt => {
@@ -43,6 +38,7 @@ delete_bnt.forEach(bnt => {
     let par_ele = bnt.parentElement;
     par_ele.remove();
     savedIn();
+    
 
 })
 })
@@ -78,26 +74,10 @@ col.addEventListener("drop",e=>{
     col.appendChild(dragedElement);
     col.classList.remove("hover-over");
 
-    [todo,progress,done].forEach(col=>{
-        const tasks = col.querySelectorAll(".task");
-        const count = col.querySelector(".right");
-
-        
-        count.innerHTML = tasks.length;
-    })
-
-    /* saving data in local storage */
     savedIn();
     
 })
 }
-
-
-
-
-
-
-
 
 
 Adddragatcolumn(todo);
@@ -114,6 +94,8 @@ const addTaskButton = document.querySelector("#add-new-task");
 toggleModalButton.addEventListener("click",(e)=>{
     modal.classList.toggle("active");
     })
+
+    
     
     bg_blur.addEventListener("click",(e)=>{
         modal.classList.remove("active");
@@ -124,25 +106,11 @@ toggleModalButton.addEventListener("click",(e)=>{
         const inp = document.querySelector("#modal-title").value;
         const text = document.querySelector("#modal-textarea").value;
 
-        
         create_div(inp,text,todo);
+
         savedIn();
-        
-
-        [todo,progress,done].forEach(col=>{
-        const tasks = col.querySelectorAll(".task");
-        const count = col.querySelector(".right");
-        
-
-
-        
-        count.innerHTML = tasks.length;
-    })
-
-    /* saving data in local storage */
-    savedIn();
- 
-    /* saving data in local storage */
+        document.querySelector("#modal-title").value = "";
+    document.querySelector("#modal-textarea").value = "";
     
         modal.classList.remove("active");
     })
@@ -170,25 +138,32 @@ function create_div(inp,text,col){
 
          div.addEventListener("drag",(e)=>{
             dragedElement = div;
+            
         })
 
     div.childNodes[5].addEventListener("click",e=>{
         div.remove();
+        savedIn();
 
     })
 }
+
+/* For saving the data in local storage */
 
 function savedIn()
 {
     [todo,progress,done].forEach(col=>{
         const tasks = col.querySelectorAll(".task");
         const count = col.querySelector(".right");
+        count.innerHTML = tasks.length;
     taskData[col.id] = Array.from(tasks).map(t =>{
             return {
                 title : t.querySelector("h2").innerText,
                 desc : t.querySelector("p").innerText,
             }
         })
+        
+        
     })
    localStorage.setItem("task_data",JSON.stringify(taskData));
 }
